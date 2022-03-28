@@ -28,7 +28,7 @@ import Highlightr
  */
 final class UXCodeTextView: UXTextView {
   
-  fileprivate let highlightr = Highlightr()
+  static let highlightr = Highlightr()
   
   private var hlTextStorage : CodeAttributedString? {
     return textStorage as? CodeAttributedString
@@ -56,13 +56,13 @@ final class UXCodeTextView: UXTextView {
   }
   private(set) var themeName = CodeEditor.ThemeName.default {
     didSet {
-      highlightr?.setTheme(to: themeName.rawValue)
-      if let font = highlightr?.theme?.codeFont { self.font = font }
+      UXCodeTextView.highlightr?.setTheme(to: themeName.rawValue)
+      if let font = UXCodeTextView.highlightr?.theme?.codeFont { self.font = font }
     }
   }
   
   init() {
-    let textStorage = highlightr.flatMap {
+    let textStorage = UXCodeTextView.highlightr.flatMap {
                         CodeAttributedString(highlightr: $0)
                       }
                    ?? NSTextStorage()
@@ -103,7 +103,7 @@ final class UXCodeTextView: UXTextView {
       let coordinator = delegate as? UXCodeTextViewDelegate
       
       let old = coordinator?.fontSize
-             ?? highlightr?.theme?.codeFont?.pointSize
+             ?? UXCodeTextView.highlightr?.theme?.codeFont?.pointSize
              ?? NSFont.systemFontSize
       let new : CGFloat
       
@@ -237,7 +237,7 @@ final class UXCodeTextView: UXTextView {
   @discardableResult
   func applyNewTheme(_ newTheme: CodeEditor.ThemeName) -> Bool {
     guard themeName != newTheme else { return false }
-    guard let highlightr = highlightr,
+    guard let highlightr = UXCodeTextView.highlightr,
           highlightr.setTheme(to: newTheme.rawValue),
           let theme      = highlightr.theme else { return false }
     if let font = theme.codeFont, font !== self.font { self.font = font }
@@ -249,7 +249,7 @@ final class UXCodeTextView: UXTextView {
                      andFontSize newSize: CGFloat) -> Bool
   {
     // Setting the theme reloads it (i.e. makes a "copy").
-    guard let highlightr = highlightr,
+    guard let highlightr = UXCodeTextView.highlightr,
           highlightr.setTheme(to: (newTheme ?? themeName).rawValue),
           let theme      = highlightr.theme else { return false }
     

@@ -148,11 +148,11 @@ public struct CodeEditor: View {
   
   /// Returns the available themes in the associated Highlightr package.
   public static var availableThemes =
-    Highlightr()?.availableThemes().map(ThemeName.init).sorted() ?? []
+    UXCodeTextView.highlightr?.availableThemes().map(ThemeName.init).sorted() ?? []
   
   /// Returns the available languages in the associated Highlightr package.
   public static var availableLanguages =
-    Highlightr()?.supportedLanguages().map(Language.init).sorted() ?? []
+    UXCodeTextView.highlightr?.supportedLanguages().map(Language.init).sorted() ?? []
   
 
   /**
